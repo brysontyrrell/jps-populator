@@ -5,6 +5,7 @@ from getpass import getpass
 import json
 import os
 import random
+import sys
 import time
 import uuid
 
@@ -112,14 +113,14 @@ MODEL_IDENTIFIERS = {
 
 OS_VERSIONS = {
     'computer': [
-        '10.13',
+        '10.13.0',
         '10.13.1',
         '10.13.2',
         '10.13.3',
         '10.13.4',
         '10.13.5',
         '10.13.6',
-        '10.14',
+        '10.14.0',
         '10.14.1',
         '10.14.2',
         '10.14.3',
@@ -127,31 +128,31 @@ OS_VERSIONS = {
         '10.14.5'
     ],
     'mobile': [
-        '11.0',
+        '11.0.0',
         '11.0.1',
         '11.0.2',
         '11.0.3',
-        '11.1',
+        '11.1.0',
         '11.1.1',
         '11.1.2',
-        '11.2',
+        '11.2.0',
         '11.2.1',
         '11.2.2',
         '11.2.5',
         '11.2.6',
-        '11.3',
+        '11.3.0',
         '11.3.1',
-        '11.4',
+        '11.4.0',
         '11.4.1',
-        '12.0',
+        '12.0.0',
         '12.0.1',
-        '12.1',
+        '12.1.0',
         '12.1.1',
         '12.1.2',
         '12.1.3',
         '12.1.4',
-        '12.2',
-        '12.3',
+        '12.2.0',
+        '12.3.0',
         '12.3.1',
         '12.3.2'
     ]
@@ -481,7 +482,7 @@ class JamfProClient:
         return self._make_request('jssuser', 'get')['user']['version']
 
     def create_record(self, path, xml):
-        return self._make_request(path, 'post', xml)
+        return self._make_request(os.path.join(path, 'id/0'), 'post', xml)
 
     def get_all_record_ids(self, path, key):
         return [i['id'] for i in self._make_request(path, 'get')[key]]
@@ -599,6 +600,10 @@ def arguments():
         help='Purge all computer, mobile device, and user records',
         action='store_true'
     )
+
+    if len(sys.argv) == 1:
+        parser.print_help(sys.stderr)
+        raise SystemExit(1)
 
     return parser.parse_args()
 
