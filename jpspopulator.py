@@ -443,8 +443,10 @@ class User:
 
 class JamfProClient:
     def __init__(self, url, username, password, verify=True):
-        if not url.startswith('https://'):
-            raise Exception("You must provide a URL beginning with 'https://'")
+        if not url.startswith('https://') and not url.startswith('http://'):
+            raise Exception(
+                "You must provide a URL beginning with 'https://' or 'http://'"
+            )
 
         self. url = os.path.join(url, 'JSSResource')
 
